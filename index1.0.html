@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4efe6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<title>My Shopping List — SOFT WEEK STUDIO</title>
+<style>
+:root{
+  --bg:#f4efe6;--card:#fffdf9;--ink:#292a27;--muted:#77786f;
+  --accent:#82927e;--accent2:#667563;--line:#e3ddd2;--danger:#9b625d;
+  --shadow:0 12px 35px rgba(42,42,39,.08);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+background:radial-gradient(circle at 10% 0%,rgba(130,146,126,.10),transparent 28%),var(--bg);color:var(--ink)}
+button,input{font:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.hidden{display:none!important}
+.screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px}
+.auth-card{width:min(100%,430px);background:var(--card);border:1px solid var(--line);border-radius:28px;padding:30px 24px;box-shadow:var(--shadow)}
+.brand{text-align:center;margin-bottom:24px}
+.logo{width:66px;height:66px;border:1px solid var(--line);border-radius:20px;display:grid;place-items:center;margin:0 auto 15px;background:#faf7f0;font-size:30px}
+.brand-name{font-family:Georgia,serif;font-size:28px;margin:0}
+.brand-sub{color:var(--muted);font-size:13px;margin:6px 0 0}
+.auth-title{text-align:center;font-size:22px;margin:18px 0 5px}
+.auth-copy{text-align:center;color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 20px}
+.field{margin:12px 0}
+.field label{display:block;font-size:12px;font-weight:700;margin:0 0 6px;color:var(--muted)}
+.field input,.search{width:100%;height:50px;border:1px solid var(--line);border-radius:14px;background:#fffefa;color:var(--ink);padding:0 14px;outline:none;font-size:16px}
+.field input:focus,.search:focus{border-color:var(--accent)}
+.primary,.secondary,.danger,.icon-btn{border:0;border-radius:14px;min-height:48px;padding:0 16px;font-weight:700}
+.primary{background:var(--ink);color:#fff;width:100%;margin-top:8px}
+.secondary{background:#eef1eb;color:#5e6b5b;border:1px solid #dfe4dc}
+.danger{background:#f4e8e5;color:var(--danger);border:1px solid #ead5d1}
+.link-btn{border:0;background:none;color:var(--accent2);font-weight:700;padding:12px 4px}
+.notice{font-size:11px;line-height:1.45;color:var(--muted);margin-top:16px;text-align:center}
+.tabs{display:flex;gap:6px;background:#f0ece4;padding:5px;border-radius:15px;margin:18px 0}
+.tabs button{flex:1;border:0;background:transparent;border-radius:11px;min-height:40px;font-weight:700;color:var(--muted)}
+.tabs button.active{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.app{width:min(100%,760px);margin:auto;padding:18px 16px calc(30px + env(safe-area-inset-bottom))}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.brand-mini{display:flex;align-items:center;gap:10px}
+.brand-mini .logo{width:44px;height:44px;border-radius:14px;margin:0;font-size:20px}
+.brand-mini h1{font-family:Georgia,serif;font-size:21px;margin:0}
+.brand-mini small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+.top-actions{display:flex;gap:7px}
+.icon-btn{width:44px;padding:0;background:var(--card);border:1px solid var(--line);color:var(--ink);display:grid;place-items:center;font-size:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:20px;margin-bottom:14px}
+.greeting{font-size:13px;color:var(--muted);margin-bottom:5px}
+.hero h2{margin:0;font-family:Georgia,serif;font-size:29px}
+.stats{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+.stat{background:#f4f1ea;border:1px solid var(--line);border-radius:13px;padding:9px 12px;font-size:12px;color:var(--muted)}
+.stat strong{color:var(--ink);font-size:16px;margin-right:4px}
+.add-box{display:flex;gap:8px;margin-bottom:14px}
+.add-box input{flex:1;min-width:0;height:52px;border:1px solid var(--line);border-radius:15px;background:var(--card);padding:0 15px;font-size:16px;outline:none}
+.add-box button{width:56px;border:0;border-radius:15px;background:var(--ink);color:#fff;font-size:24px}
+.toolbar{display:flex;gap:8px;margin-bottom:14px}
+.toolbar .search{flex:1}
+.small-btn{min-height:48px;padding:0 13px;border-radius:14px;border:1px solid var(--line);background:var(--card);font-weight:700;color:var(--ink)}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:18px 3px 8px}
+.section-title h3{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:0}
+.list{list-style:none;margin:0;padding:0}
+.item{display:flex;align-items:center;gap:12px;min-height:62px;padding:10px 11px 10px 15px;background:var(--card);border:1px solid var(--line);border-radius:16px;margin:8px 0;transition:.18s}
+.item span{flex:1;font-size:16px;overflow-wrap:anywhere}
+.check{width:40px;height:40px;border-radius:12px;border:1px solid #d8ded4;background:#eef2ec;color:#60705d;font-size:18px}
+.item.bought{opacity:.75}
+.item.bought span{text-decoration:line-through}
+.restore{width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:#f4f1eb}
+.empty{padding:30px 15px;text-align:center;color:var(--muted);font-size:14px}
+.bottom-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
+.bottom-actions button{min-height:50px;border-radius:15px}
+.panel{padding:18px;margin-top:14px}
+.panel h3{margin:0 0 12px;font-size:18px;font-family:Georgia,serif}
+.archive-row{display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:#fbf8f2;border-radius:15px;padding:12px;margin:8px 0}
+.archive-info{flex:1;min-width:0}
+.archive-info strong{display:block;font-size:14px}
+.archive-info small{color:var(--muted);font-size:11px}
+.archive-actions{display:flex;gap:6px}
+.archive-actions button{min-height:38px;padding:0 9px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:12px;font-weight:700}
+.modal{position:fixed;inset:0;background:rgba(25,25,23,.42);display:flex;align-items:flex-end;justify-content:center;padding:14px;z-index:20}
+.modal-card{width:min(100%,520px);background:var(--card);border-radius:24px;padding:20px;max-height:90vh;overflow:auto}
+.modal-card h3{margin:0 0 8px;font-family:Georgia,serif;font-size:22px}
+.modal-card p{color:var(--muted);font-size:13px;line-height:1.5}
+.modal-actions{display:flex;gap:8px;margin-top:15px}
+.modal-actions button{flex:1;min-height:48px}
+.settings-grid{display:grid;gap:10px}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:13px;border:1px solid var(--line);border-radius:15px}
+.setting-row div{flex:1}
+.setting-row strong{display:block;font-size:14px}
+.setting-row small{color:var(--muted);font-size:11px}
+.toggle{width:50px;height:29px;border-radius:20px;border:0;background:#d8d8d2;position:relative}
+.toggle:after{content:"";position:absolute;width:23px;height:23px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle.on{background:var(--accent)}
+.toggle.on:after{left:24px}
+.footer{text-align:center;color:var(--muted);font-size:10px;letter-spacing:.7px;margin-top:20px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 15px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:40;max-width:90%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+body.dark{--bg:#1f211e;--card:#292c28;--ink:#f4f1ea;--muted:#b6b7ae;--line:#41453f;--accent:#a4b39f;--accent2:#b9c7b4;--danger:#d79a93}
+body.dark .logo,body.dark .stat,body.dark .tabs{background:#232621}
+body.dark .field input,body.dark .search,body.dark .add-box input{background:#252823;color:var(--ink)}
+body.dark .secondary{background:#343a32;color:#d5dfd0}
+body.dark .archive-row{background:#242722}
+@media(min-width:700px){
+  .app{padding-top:30px}.modal{align-items:center}.hero{padding:25px}.add-box input{height:56px}.add-box button{height:56px}
+}
+@media(max-width:390px){
+  .app{padding-left:12px;padding-right:12px}.hero h2{font-size:25px}.bottom-actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div id="authScreen" class="screen">
+  <div class="auth-card">
+    <div class="brand">
+      <div class="logo">🛒</div>
+      <h1 class="brand-name">SOFT WEEK STUDIO</h1>
+      <p class="brand-sub">My Shopping List</p>
+    </div>
+    <div class="tabs">
+      <button id="loginTab" class="active" onclick="showAuth('login')">Log in</button>
+      <button id="registerTab" onclick="showAuth('register')">Create account</button>
+    </div>
+
+    <div id="loginBox">
+      <h2 class="auth-title">Welcome back</h2>
+      <p class="auth-copy">Your shopping data stays on this device.</p>
+      <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="you@example.com"></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password"></div>
+      <button class="primary" onclick="login()">Log in</button>
+    </div>
+
+    <div id="registerBox" class="hidden">
+      <h2 class="auth-title">Create your account</h2>
+      <p class="auth-copy">This is a local account for the downloadable HTML version.</p>
+      <div class="field"><label>Your name</label><input id="regName" type="text" autocomplete="name" placeholder="Your name"></div>
+      <div class="field"><label>Email</label><input id="regEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <div class="field"><label>Password</label><input id="regPassword" type="password" autocomplete="new-password" placeholder="At least 6 characters"></div>
+      <button class="primary" onclick="register()">Create account</button>
+    </div>
+
+    <p class="notice">Offline version: no email is sent and no online server is used. Online accounts and licence activation can be added in a future version.</p>
+  </div>
+</div>
+
+<div id="appScreen" class="hidden">
+  <main class="app">
+    <div class="topbar">
+      <div class="brand-mini">
+        <div class="logo">🛒</div>
+        <div><h1>My Shopping List</h1><small>SOFT WEEK STUDIO</small></div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="openPanel('archive')" aria-label="Archive">🗂️</button>
+        <button class="icon-btn" onclick="openPanel('settings')" aria-label="Settings">⚙️</button>
+      </div>
+    </div>
+
+    <section class="card hero">
+      <div class="greeting" id="greeting">Hello</div>
+      <h2>Shop smart. Keep it simple.</h2>
+      <div class="stats">
+        <div class="stat"><strong id="activeCount">0</strong>to buy</div>
+        <div class="stat"><strong id="boughtCount">0</strong>bought</div>
+        <div class="stat"><strong id="archiveCount">0</strong>saved</div>
+      </div>
+    </section>
+
+    <div class="add-box">
+      <input id="itemInput" type="text" maxlength="120" placeholder="Add an item..." autocomplete="off">
+      <button onclick="addItem()" aria-label="Add item">+</button>
+    </div>
+
+    <div class="toolbar">
+      <input id="searchInput" class="search" type="search" placeholder="Search your list..." oninput="render()">
+      <button class="small-btn" onclick="restoreBought()">↩ Restore</button>
+    </div>
+
+    <div class="section-title"><h3>Shopping list</h3><span id="listStatus" style="font-size:11px;color:var(--muted)"></span></div>
+    <ul id="activeList" class="list"></ul>
+    <div id="empty" class="empty">Your list is empty.<br>Add your first item.</div>
+
+    <div class="section-title"><h3>Bought</h3><button class="link-btn" onclick="toggleBought()" id="toggleBought">Show bought</button></div>
+    <ul id="boughtList" class="list hidden"></ul>
+
+    <div class="bottom-actions">
+      <button class="secondary" onclick="archiveAndClear()">🗂️ Save & clear list</button>
+      <button class="danger" onclick="confirmClear()">Delete all</button>
+    </div>
+
+    <div class="footer">SHOP SMART · KEEP IT SIMPLE · SOFT WEEK STUDIO</div>
+  </main>
+</div>
+
+<div id="modal" class="modal hidden" onclick="backdropClose(event)">
+  <div class="modal-card" id="modalCard"></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const USERS_KEY="soft_week_studio_users_v1";
+const SESSION_KEY="soft_week_studio_session_v1";
+const DATA_PREFIX="soft_week_studio_shop_data_v1_";
+const ARCHIVE_PREFIX="soft_week_studio_shop_archive_v1_";
+let currentUser=null;
+let items=[];
+let archive=[];
+let showBought=false;
+let dark=false;
+
+function users(){return JSON.parse(localStorage.getItem(USERS_KEY)||"{}")}
+function saveUsers(u){localStorage.setItem(USERS_KEY,JSON.stringify(u))}
+function userKey(email){return encodeURIComponent(email.trim().toLowerCase())}
+function dataKey(){return DATA_PREFIX+userKey(currentUser.email)}
+function archiveKey(){return ARCHIVE_PREFIX+userKey(currentUser.email)}
+
+function showAuth(mode){
+  document.getElementById("loginBox").classList.toggle("hidden",mode!=="login");
+  document.getElementById("registerBox").classList.toggle("hidden",mode!=="register");
+  document.getElementById("loginTab").classList.toggle("active",mode==="login");
+  document.getElementById("registerTab").classList.toggle("active",mode==="register");
+}
+
+function simpleHash(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
+  return (h>>>0).toString(16);
+}
+
+function register(){
+  const name=document.getElementById("regName").value.trim();
+  const email=document.getElementById("regEmail").value.trim().toLowerCase();
+  const password=document.getElementById("regPassword").value;
+  if(!name||!email||!email.includes("@")||password.length<6){toast("Please enter a name, valid email and 6+ character password.");return}
+  const u=users();
+  if(u[email]){toast("An account with this email already exists.");showAuth("login");return}
+  u[email]={name,email,passwordHash:simpleHash(password),createdAt:new Date().toISOString()};
+  saveUsers(u);
+  currentUser=u[email];
+  localStorage.setItem(SESSION_KEY,email);
+  loadUser();
+  toast("Account created. Welcome!");
+}
+
+function login(){
+  const email=document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password=document.getElementById("loginPassword").value;
+  const u=users();
+  if(!u[email]||u[email].passwordHash!==simpleHash(password)){toast("Email or password is incorrect.");return}
+  currentUser=u[email];
+  localStorage.setItem(SESSION_KEY,email);
+  loadUser();
+  toast("Welcome back!");
+}
+
+function logout(){
+  localStorage.removeItem(SESSION_KEY);
+  currentUser=null;items=[];archive=[];
+  document.getElementById("appScreen").classList.add("hidden");
+  document.getElementById("authScreen").classList.remove("hidden");
+  showAuth("login");
+}
+
+function loadUser(){
+  items=JSON.parse(localStorage.getItem(dataKey())||"[]");
+  archive=JSON.parse(localStorage.getItem(archiveKey())||"[]");
+  document.getElementById("authScreen").classList.add("hidden");
+  document.getElementById("appScreen").classList.remove("hidden");
+  document.getElementById("greeting").textContent="Hello, "+currentUser.name.split(" ")[0];
+  render();
+}
+
+function saveData(){localStorage.setItem(dataKey(),JSON.stringify(items))}
+function saveArchive(){localStorage.setItem(archiveKey(),JSON.stringify(archive))}
+
+function addItem(){
+  const input=document.getElementById("itemInput");
+  const text=input.value.trim();
+  if(!text)return;
+  items.push({id:Date.now()+Math.random(),text,bought:false,createdAt:new Date().toISOString()});
+  input.value="";saveData();render();input.focus();toast("Added to your list.");
+}
+document.getElementById("itemInput").addEventListener("keydown",e=>{if(e.key==="Enter")addItem()});
+
+function markBought(id){const i=items.find(x=>x.id===id);if(i){i.bought=true;i.boughtAt=new Date().toISOString();saveData();render()}}
+function markToBuy(id){const i=items.find(x=>x.id===id);if(i){i.bought=false;delete i.boughtAt;saveData();render()}}
+function restoreBought(){items.forEach(i=>{i.bought=false;delete i.boughtAt});saveData();render();toast("Bought items moved back.")}
+function toggleBought(){showBought=!showBought;document.getElementById("toggleBought").textContent=showBought?"Hide bought":"Show bought";render()}
+
+function archiveCurrent(){
+  if(!items.length){toast("There is nothing to save.");return false}
+  archive.unshift({id:Date.now(),date:new Date().toISOString(),items:JSON.parse(JSON.stringify(items))});
+  saveArchive();return true;
+}
+function archiveAndClear(){
+  if(!items.length){toast("Your list is already empty.");return}
+  archiveCurrent();items=[];saveData();render();toast("List saved to Archive and cleared.");
+}
+function confirmClear(){
+  if(!items.length){toast("Your list is already empty.");return}
+  openConfirm("Delete all items?","Your current list will be saved in Archive first, then removed from the shopping list.",
+    ()=>{archiveCurrent();items=[];saveData();render();closeModal();toast("List saved to Archive and cleared.")});
+}
+
+function render(){
+  const q=(document.getElementById("searchInput")?.value||"").trim().toLowerCase();
+  const active=items.filter(i=>!i.bought&&i.text.toLowerCase().includes(q));
+  const bought=items.filter(i=>i.bought&&i.text.toLowerCase().includes(q));
+  const activeAll=items.filter(i=>!i.bought).length;
+  const boughtAll=items.filter(i=>i.bought).length;
+  document.getElementById("activeCount").textContent=activeAll;
+  document.getElementById("boughtCount").textContent=boughtAll;
+  document.getElementById("archiveCount").textContent=archive.length;
+  document.getElementById("listStatus").textContent=items.length?items.length+" total":"";
+  const activeList=document.getElementById("activeList");
+  const boughtList=document.getElementById("boughtList");
+  activeList.innerHTML="";boughtList.innerHTML="";
+  active.forEach(i=>{
+    const li=document.createElement("li");li.className="item";
+    const s=document.createElement("span");s.textContent=i.text;
+    const b=document.createElement("button");b.className="check";b.textContent="✓";b.setAttribute("aria-label","Mark as bought");b.onclick=()=>markBought(i.id);
+    li.append(s,b);activeList.appendChild(li);
+  });
+  bought.forEach(i=>{
+    const li=document.createElement("li");li.className="item bought";
+    const s=document.createElement("span");s.textContent=i.text;
+    const b=document.createElement("button");b.className="restore";b.textContent="↩";b.setAttribute("aria-label","Move back to shopping list");b.onclick=()=>markToBuy(i.id);
+    li.append(s,b);boughtList.appendChild(li);
+  });
+  document.getElementById("empty").style.display=active.length?"none":"block";
+  boughtList.classList.toggle("hidden",!showBought);
+}
+
+function formatDate(iso){
+  try{return new Intl.DateTimeFormat(undefined,{dateStyle:"medium",timeStyle:"short"}).format(new Date(iso))}
+  catch(e){return new Date(iso).toLocaleString()}
+}
+function openPanel(type){
+  const modal=document.getElementById("modal"),card=document.getElementById("modalCard");
+  if(type==="archive"){
+    let rows=archive.map(a=>{
+      const count=a.items.length;
+      return `<div class="archive-row"><div class="archive-info"><strong>${count} ${count===1?"item":"items"}</strong><small>${formatDate(a.date)}</small></div><div class="archive-actions"><button onclick="restoreArchive(${a.id})">Restore</button><button onclick="deleteArchive(${a.id})">Delete</button></div></div>`
+    }).join("");
+    if(!rows)rows='<div class="empty">No saved lists yet.</div>';
+    card.innerHTML=`<h3>Archive</h3><p>Your completed lists are saved with their date and time.</p>${rows}<div class="modal-actions"><button class="secondary" onclick="closeModal()">Close</button></div>`;
+  }else{
+    card.innerHTML=`<h3>Settings</h3>
+      <p>Personalise your shopping list.</p>
+      <div class="settings-grid">
+        <div class="setting-row"><div><strong>Dark mode</strong><small>Comfortable in low light.</small></div><button id="darkToggle" class="toggle ${dark?"on":""}" onclick="toggleDark()"></button></div>
+        <div class="setting-row"><div><strong>Backup data</strong><small>Download your lists and archive as a JSON file.</small></div><button class="secondary" onclick="exportBackup()">Export</button></div>
+        <div class="setting-row"><div><strong>Restore backup</strong><small>Import a backup created by this app.</small></div><button class="secondary" onclick="document.getElementById('fileInput').click()">Import</button></div>
+        <div class="setting-row"><div><strong>Account</strong><small>${escapeText(currentUser.email)}</small></div><button class="danger" onclick="logout()">Log out</button></div>
+      </div>
+      <input id="fileInput" type="file" accept=".json,application/json" class="hidden" onchange="importBackup(event)">
+      <div class="modal-actions"><button class="secondary" onclick="closeModal()">Close</button></div>`;
+  }
+  modal.classList.remove("hidden");
+}
+function openConfirm(title,text,yes){
+  const card=document.getElementById("modalCard");
+  card.innerHTML=`<h3>${title}</h3><p>${text}</p><div class="modal-actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="danger" id="confirmYes">Yes, delete all</button></div>`;
+  document.getElementById("confirmYes").onclick=yes;
+  document.getElementById("modal").classList.remove("hidden");
+}
+function closeModal(){document.getElementById("modal").classList.add("hidden")}
+function backdropClose(e){if(e.target.id==="modal")closeModal()}
+
+function restoreArchive(id){
+  const a=archive.find(x=>x.id===id);if(!a)return;
+  items=JSON.parse(JSON.stringify(a.items));saveData();render();closeModal();toast("Saved list restored.");
+}
+function deleteArchive(id){
+  archive=archive.filter(x=>x.id!==id);saveArchive();openPanel("archive");render();toast("Archive entry deleted.");
+}
+
+function toggleDark(){
+  dark=!dark;document.body.classList.toggle("dark",dark);
+  localStorage.setItem("soft_week_studio_dark_v1",dark?"1":"0");
+  const t=document.getElementById("darkToggle");if(t)t.classList.toggle("on",dark);
+}
+function exportBackup(){
+  const payload={app:"SOFT WEEK STUDIO — My Shopping List",version:1,email:currentUser.email,exportedAt:new Date().toISOString(),items,archive};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="soft_week_studio-shopping-list-backup.json";a.click();URL.revokeObjectURL(a.href);
+  toast("Backup exported.");
+}
+function importBackup(e){
+  const file=e.target.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const p=JSON.parse(r.result);
+      if(!Array.isArray(p.items)||!Array.isArray(p.archive))throw new Error();
+      items=p.items;archive=p.archive;saveData();saveArchive();render();closeModal();toast("Backup restored.");
+    }catch(err){toast("This backup file is not valid.")}
+  };r.readAsText(file);
+}
+function escapeText(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML}
+let toastTimer;
+function toast(msg){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2400);
+}
+
+dark=localStorage.getItem("soft_week_studio_dark_v1")==="1";document.body.classList.toggle("dark",dark);
+const savedSession=localStorage.getItem(SESSION_KEY);
+if(savedSession&&users()[savedSession]){currentUser=users()[savedSession];loadUser()}
+</script>
+</body>
+</html>
