@@ -417,5 +417,11 @@ dark=localStorage.getItem("soft_week_studio_dark_v1")==="1";document.body.classL
 const savedSession=localStorage.getItem(SESSION_KEY);
 if(savedSession&&users()[savedSession]){currentUser=users()[savedSession];loadUser()}
 </script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function () {
+    navigator.serviceWorker.register("./sw.js");
+  });
+}
 </body>
 </html>
